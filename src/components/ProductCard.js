@@ -54,9 +54,9 @@ const cardStyle = {
     return (
       <Card sx={cardStyle}>
         <CardContent>
-          <h2>{product.brand}</h2>
-          <div>{product.name}</div>
-          <CardMedia component="img" height="140" image={image} />
+          <h2>{product.brand || "(Generic)"}</h2>
+          <div style={{height: "3em"}}>{product.name}</div>
+          {product.image_link ? <CardMedia component="img" height="140" src={product.image_link} /> : <CardMedia component="img" height="140" image={image} />}
           <div>
             $ {product.price}
           </div>
