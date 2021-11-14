@@ -1,5 +1,6 @@
 import { Fragment, useContext } from "react";
 import { useIdentityContext } from "react-netlify-identity-gotrue";
+import { useNavigate } from "react-router-dom"
 
 import CartContext from "../providers/CartContext";
 import Button from "@mui/material/Button";
@@ -9,10 +10,25 @@ import Stack from "@mui/material/Stack";
 const NavBar = (props) => {
   const cartCtx = useContext(CartContext);
   const identity = useIdentityContext();
+  const navigate = useNavigate();
   const greeting = `Hello, ${identity.user?.user_metadata?.full_name}`;
+
   const cartItemsTotal = cartCtx.items.reduce((currentNum, item) => {
     return currentNum + item.amount;
   }, 0);
+
+  const signInHandler = () => {
+    navigate("/signin")
+  };
+
+  const signUpHandler = () => {
+    navigate("/signup")
+  };
+
+  const signOutHandler = () => {
+    identity.user.logout();
+    navigate("/")
+  };
 
   return (
     <Stack direction="row" spacing={2}>
@@ -42,14 +58,14 @@ const NavBar = (props) => {
       {identity.user && (
         <Fragment>
           <h3>{greeting}</h3>
-          <Button variant="contained">Sign Out</Button>
+          <Button variant="contained" onClick={signOutHandler}>Sign Out</Button>
         </Fragment>
       )}
 
       {!identity.user && (
         <Fragment>
-          <Button variant="contained">Sign In</Button>
-          <Button variant="contained">Sign Up</Button>
+          <Button variant="contained" onClick={signInHandler}>Sign In</Button>
+          <Button variant="contained" onClick={signUpHandler}>Sign Up</Button>
         </Fragment>
       )}
     </Stack>
