@@ -26,7 +26,7 @@ const NavBar = (props) => {
   };
 
   const signOutHandler = () => {
-    identity.user.logout();
+    identity.logout();
     navigate("/")
   };
 
