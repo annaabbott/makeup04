@@ -10,7 +10,7 @@ import "./test";
 
 ReactDOM.render(
   <React.StrictMode>
-    <NetlifyIdentityContext url={"https://nextjs-identity-demo.jonsully.net"}>
+    <NetlifyIdentityContext url={"https://gifted-montalcini-29c385.netlify.app"}>
       <BrowserRouter>
         <ProductDataProvider>
           <CartProvider>
