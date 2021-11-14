@@ -44,9 +44,9 @@ const cardStyle = {
 */
 
 
-//   function CapitalizeString(phrase) {
-//     return phrase[0].toUpperCase() + phrase.slice(1);
-//   }
+  function CapitalizeString(phrase) {
+    return phrase[0].toUpperCase() + phrase.slice(1);
+  }
   
   function ProductCard({
     product
@@ -58,7 +58,7 @@ const cardStyle = {
           <div style={{height: "3em"}}>{product.name}</div>
           {product.image_link ? <CardMedia component="img" height="140" src={product.image_link} /> : <CardMedia component="img" height="140" image={image} />}
           <div>
-            $ {product.price}
+            $ {Math.round(product.price).toFixed(2)}
           </div>
           <Box sx={bottomRow}>
             <Button >View Product Details</Button>

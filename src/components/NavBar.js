@@ -1,11 +1,12 @@
 import { Fragment, useContext } from "react";
 import { useIdentityContext } from "react-netlify-identity-gotrue";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 import CartContext from "../providers/CartContext";
 import Button from "@mui/material/Button";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box"
 
 const NavBar = (props) => {
   const cartCtx = useContext(CartContext);
@@ -18,26 +19,31 @@ const NavBar = (props) => {
   }, 0);
 
   const signInHandler = () => {
-    navigate("/signin")
+    navigate("/signin");
   };
 
   const signUpHandler = () => {
-    navigate("/signup")
+    navigate("/signup");
   };
 
   const signOutHandler = () => {
     identity.logout();
-    navigate("/")
+    navigate("/");
   };
 
-  return (
-    <Stack direction="row" spacing={2}>
-      <h1>React Drug Store Cosmetics</h1>
+  const navigateHomeHandler = () => {
+    navigate("/")
+  }
 
+  return (
+    <Stack direction="row" spacing={2} sx={{justifyContent: "space-between", width: "1200px"}}>
+      <h1 onClick={navigateHomeHandler} style={{cursor:"pointer"}}>React Drug Store Cosmetics</h1>
+
+      <Box sx={{display: "flex", alignItems: "center", "&>*": {margin:"8px"}}}>
       <Button
-        variant="contained"
         startIcon={<ShoppingCartIcon />}
         onClick={props.onClick}
+        sx={{ marginTop: "1rem" }}
       >
         My Cart
         <span
@@ -58,16 +64,35 @@ const NavBar = (props) => {
       {identity.user && (
         <Fragment>
           <h3>{greeting}</h3>
-          <Button variant="contained" onClick={signOutHandler}>Sign Out</Button>
+          <Button
+            variant="contained"
+            onClick={signOutHandler}
+            sx={{ marginTop: "1rem" }}
+          >
+            Sign Out
+          </Button>
         </Fragment>
       )}
 
       {!identity.user && (
         <Fragment>
-          <Button variant="contained" onClick={signInHandler}>Sign In</Button>
-          <Button variant="contained" onClick={signUpHandler}>Sign Up</Button>
+          <Button
+            variant="contained"
+            sx={{ marginTop: "1rem" }}
+            onClick={signInHandler}
+          >
+            Sign In
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ marginTop: "1rem" }}
+            onClick={signUpHandler}
+          >
+            Sign Up
+          </Button>
         </Fragment>
       )}
+      </Box>
     </Stack>
   );
 };

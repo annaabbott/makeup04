@@ -1,7 +1,12 @@
-import { useState } from "react";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { useState, Fragment } from "react";
+import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useIdentityContext } from "react-netlify-identity-gotrue";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import { TextField } from "@mui/material";
+import Button from "@mui/material/Button";
 
 const SignUpPage = () => {
   const [signupComplete, setSignupComplete] = useState(false);
@@ -20,74 +25,111 @@ const SignUpPage = () => {
   }
 
   return (
-    <Formik
-      initialValues={{
-        full_name: "",
-        email: "",
-        password: "",
-        password2: "",
-      }}
-      validationSchema={Yup.object({
-        full_name: Yup.string().required(
-          "Required: Please enter your full name"
-        ),
-        email: Yup.string()
-          .email("Invalid Email address")
-          .required("Required: Please enter your email address"),
-        password: Yup.string().required("Required: Please enter a password"),
-        password2: Yup.string()
-          .required("Required: Please retype your password")
-          .oneOf([Yup.ref("password"), null], "Required: Passwords must match"),
-      })}
-      onSubmit={async (values, { setSubmitting }) => {
-        const data = {
-          email: values.email,
-          password: values.password,
-          user_metadata: { full_name: values.full_name },
-        };
+    <Fragment>
+      <CssBaseline />
+      <Container maxWidth="sm">
+        <Box />
+        <h2>Sign Up For an Account</h2>
 
-        try {
-          await identity.signup(data);
-          setSignupComplete(true);
-        } catch (err) {
-          alert(`System error: ${err.message}`)
-        }
+        <Formik
+          initialValues={{
+            full_name: "",
+            email: "",
+            password: "",
+            password2: "",
+          }}
+          validationSchema={Yup.object({
+            full_name: Yup.string().required(
+              "Required: Please enter your full name"
+            ),
+            email: Yup.string()
+              .email("Invalid Email address")
+              .required("Required: Please enter your email address"),
+            password: Yup.string().required(
+              "Required: Please enter a password"
+            ),
+            password2: Yup.string()
+              .required("Required: Please retype your password")
+              .oneOf(
+                [Yup.ref("password"), null],
+                "Required: Passwords must match"
+              ),
+          })}
+          onSubmit={async (values, { setSubmitting }) => {
+            const data = {
+              email: values.email,
+              password: values.password,
+              user_metadata: { full_name: values.full_name },
+            };
 
-        setSubmitting(false);
-      }}
-    >
-      {(formik) => (
-        <Form>
-          <label htmlFor="full_name">Full Name</label>
-          <Field name="full_name" type="text" disabled={formik.isSubmitting} />
-          <ErrorMessage name="full_name" />
+            try {
+              await identity.signup(data);
+              setSignupComplete(true);
+            } catch (err) {
+              alert(`System error: ${err.message}`);
+            }
 
-          <label htmlFor="email">Email Address</label>
-          <Field name="email" type="email" disabled={formik.isSubmitting} />
-          <ErrorMessage name="email" />
+            setSubmitting(false);
+          }}
+        >
+          {(formik) => (
+            <Form>
+              <label htmlFor="full_name">Full Name</label>
+              <TextField
+                fullWidth
+                name="full_name"
+                type="text"
+                margin="dense"
+                disabled={formik.isSubmitting}
+                
+              />
+              <ErrorMessage name="full_name" />
 
-          <label htmlFor="password">Password</label>
-          <Field
-            name="password"
-            type="password"
-            disabled={formik.isSubmitting}
-          />
-          <ErrorMessage name="password" />
+              <label htmlFor="email">Email Address</label>
+              <TextField
+                fullWidth
+                name="email"
+                type="email"
+                margin="dense"
+                disabled={formik.isSubmitting}
+              />
+              <ErrorMessage name="email" />
 
-          <label htmlFor="password2">Retype Password</label>
-          <Field
-            name="password2"
-            type="password"
-            disabled={formik.isSubmitting}
-          />
-          <ErrorMessage name="password2" />
+              <label htmlFor="password">Password</label>
+              <TextField
+                fullWidth
+                name="password"
+                type="password"
+                margin="dense"
+                disabled={formik.isSubmitting}
+              />
+              <ErrorMessage name="password" />
 
-          <button type="submit" disabled={formik.isSubmitting}>
-            Submit
-          </button>
-        </Form>
-      )}
-    </Formik>
+              <label htmlFor="password2">Retype Password</label>
+              <TextField
+                fullWidth
+                name="password2"
+                type="password"
+                margin="dense"
+                disabled={formik.isSubmitting}
+              />
+              <ErrorMessage name="password2" />
+
+              <Button
+                variant="contained"
+                type="submit"
+                fullWidth
+                margin="dense"
+                sx={{marginTop:"1rem"}}
+                disabled={formik.isSubmitting}
+              >
+                Submit
+              </Button >
+            </Form>
+          )}
+        </Formik>
+      </Container>
+    </Fragment>
   );
 };
 export default SignUpPage;
