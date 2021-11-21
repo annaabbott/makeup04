@@ -17,11 +17,6 @@ import ProductCard from "./ProductCard";
 // }));
 
 const ProductCategory = ({category}) => {
-  console.log("item 0:", category.items[0]);
-  console.log("item 1:", category.items[1]);
-  console.log("item 2:", category.items[2]);
-  console.log("item 3:", category.items[3]);
-
   return (
     <div>
       <CssBaseline />
@@ -33,10 +28,10 @@ const ProductCategory = ({category}) => {
           divider={<Divider orientation="vertical" flexItem />}
           spacing={2}
         >
-          <ProductCard key={category.items[0].id} product={category.items[0]}/>
-          <ProductCard key={category.items[1].id} product={category.items[1]}/>
-          <ProductCard key={category.items[2].id} product={category.items[2]}/>
-          <ProductCard key={category.items[3].id} product={category.items[3]}/>
+          <ProductCard key={category.items[0].id} categoryName={category.name} product={category.items[0]}/>
+          <ProductCard key={category.items[1].id} categoryName={category.name} product={category.items[1]}/>
+          <ProductCard key={category.items[2].id} categoryName={category.name} product={category.items[2]}/>
+          <ProductCard key={category.items[3].id} categoryName={category.name} product={category.items[3]}/>
           {/* <ProductCard>See All Category Name</ProductCard> */}
         </Stack>
       </Container>

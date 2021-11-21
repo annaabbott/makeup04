@@ -28,6 +28,5 @@ function buildDataSet(data) {
 (async () => {
   const data = await getProducts();
   const dataTwo = buildDataSet(data);
-  console.log(dataTwo);
 })();
 

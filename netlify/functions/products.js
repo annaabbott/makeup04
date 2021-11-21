@@ -36,11 +36,8 @@ exports.handler = async function (event, context) {
 
   const productType = getProductType(event.path);
 
-  console.log("productType=" + productType)
-  
   try {
     let data = await getProductsByType(productType);
-    console.log("SUCCESS!");
 
     data = buildDataSet(data);
 
@@ -49,8 +46,6 @@ exports.handler = async function (event, context) {
       body: JSON.stringify(data),
     };
   } catch (err) {
-    console.log("request error", JSON.stringify(err));
-
     return {
       statusCode: 404,
       body: err.toString(),

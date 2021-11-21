@@ -6,17 +6,17 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import image from "../images/placeholderImg.jpg"
+import image from "../images/placeholderImg.jpg";
+import { useNavigate } from "react-router";
 
 const cardStyle = {
-    width: "300px",
-    
-  };
-  
-  const bottomRow = {
-    display: "flex",
-    justifyContent: "space-between",
-  };
+  width: "300px",
+};
+
+const bottomRow = {
+  display: "flex",
+  justifyContent: "space-between",
+};
 
 /*
 {
@@ -43,34 +43,34 @@ const cardStyle = {
 
 */
 
+function ProductCard({ categoryName, product }) {
+  const navigate = useNavigate();
 
-  function CapitalizeString(phrase) {
-    return phrase[0].toUpperCase() + phrase.slice(1);
+  function showDetails() {
+    navigate(`/products/${categoryName}/${product.id}`)
   }
-  
-  function ProductCard({
-    product
-  }) {
-    return (
-      <Card sx={cardStyle}>
-        <CardContent>
-          <h2>{product.brand || "(Generic)"}</h2>
-          <div style={{height: "3em"}}>{product.name}</div>
-          {product.image_link ? <CardMedia component="img" height="140" src={product.image_link} /> : <CardMedia component="img" height="140" image={image} />}
-          <div>
-            $ {Math.round(product.price).toFixed(2)}
-          </div>
-          <Box sx={bottomRow}>
-            <Button >View Product Details</Button>
-              
-            <IconButton>
-              <ShoppingCartIcon />
-            </IconButton>
-          </Box>
-        </CardContent>
-      </Card>
-    );
-  }
-  
-  export default ProductCard;
-  
+
+  return (
+    <Card sx={cardStyle}>
+      <CardContent>
+        <h2>{product.brand || "(Generic)"}</h2>
+        <div style={{ height: "3em" }}>{product.name}</div>
+        {product.image_link ? (
+          <CardMedia component="img" height="140" src={product.image_link} />
+        ) : (
+          <CardMedia component="img" height="140" image={image} />
+        )}
+        <div>$ {Math.round(product.price).toFixed(2)}</div>
+        <Box sx={bottomRow}>
+          <Button onClick={showDetails}>View Product Details</Button>
+
+          <IconButton>
+            <ShoppingCartIcon />
+          </IconButton>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+}
+
+export default ProductCard;

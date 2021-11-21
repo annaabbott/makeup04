@@ -36,11 +36,12 @@ export function ProductDataProvider(props) {
       await getProductsByType("lipstick");
       await getProductsByType("mascara");
       await getProductsByType("nail_polish");
-      setIsLoading(false);
     } catch (error) {
       setError(error);
       console.log(error);
     }
+
+    setIsLoading(false);
   }
 
   useEffect(() => {
