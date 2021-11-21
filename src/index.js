@@ -6,7 +6,6 @@ import NetlifyIdentityContext from "react-netlify-identity-gotrue";
 import App from "./App";
 import { ProductDataProvider } from "./providers/ProductDataContext";
 import { CartProvider } from "./providers/CartContext";
-import "./test";
 
 ReactDOM.render(
   <React.StrictMode>
