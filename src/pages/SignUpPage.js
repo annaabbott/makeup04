@@ -32,13 +32,16 @@ const SignUpPage = () => {
 
   if (signupComplete) {
     return (
-      <div>
+      <Fragment>
+        <CssBaseline />
+        <Container>
         <h3>Signup complete</h3>
         <p>
           Please check your email for a confirmation message. Click the link to
           complete the signup process.
         </p>
-      </div>
+        </Container>
+      </Fragment>
     );
   }
 
