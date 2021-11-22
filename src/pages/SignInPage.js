@@ -9,9 +9,35 @@ import Container from "@mui/material/Container";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 
+const validationSchema=Yup.object({
+  email: Yup.string()
+    .email("Invalid Email address")
+    .required("Required: Please enter your email address"),
+  password: Yup.string().required(
+    "Required: Please enter a password"
+  ),
+});
+
 const SignInPage = () => {
   const navigate = useNavigate();
   const identity = useIdentityContext();
+
+  const onSubmit = async (values, { setSubmitting }) => {
+    const data = {
+      email: values.email,
+      password: values.password,
+    };
+
+    try {
+      await identity.login(data);
+
+      navigate("/");
+    } catch (err) {
+      alert(`System error: ${err.message}`);
+    }
+
+    setSubmitting(false);
+  }
 
   return (
     <Fragment>
@@ -25,30 +51,8 @@ const SignInPage = () => {
             email: "",
             password: "",
           }}
-          validationSchema={Yup.object({
-            email: Yup.string()
-              .email("Invalid Email address")
-              .required("Required: Please enter your email address"),
-            password: Yup.string().required(
-              "Required: Please enter a password"
-            ),
-          })}
-          onSubmit={async (values, { setSubmitting }) => {
-            const data = {
-              email: values.email,
-              password: values.password,
-            };
-
-            try {
-              await identity.login(data);
-
-              navigate("/");
-            } catch (err) {
-              alert(`System error: ${err.message}`);
-            }
-
-            setSubmitting(false);
-          }}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
         >
           {(formik) => (
             <Form>
@@ -58,6 +62,8 @@ const SignInPage = () => {
                 name="email"
                 type="email"
                 margin="dense"
+                onChange={formik.handleChange}
+                value={formik.values.email}
                 disabled={formik.isSubmitting}
               />
               <ErrorMessage name="email" />
@@ -68,6 +74,8 @@ const SignInPage = () => {
                 name="password"
                 type="password"
                 margin="dense"
+                onChange={formik.handleChange}
+                value={formik.values.password}
                 disabled={formik.isSubmitting}
               />
               <ErrorMessage name="password" />

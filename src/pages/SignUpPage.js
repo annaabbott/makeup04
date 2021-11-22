@@ -8,6 +8,24 @@ import Container from "@mui/material/Container";
 import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 
+const validationSchema = Yup.object({
+  full_name: Yup.string().required(
+    "Required: Please enter your full name"
+  ),
+  email: Yup.string()
+    .email("Invalid Email address")
+    .required("Required: Please enter your email address"),
+  password: Yup.string().required(
+    "Required: Please enter a password"
+  ),
+  password2: Yup.string()
+    .required("Required: Please retype your password")
+    .oneOf(
+      [Yup.ref("password"), null],
+      "Required: Passwords must match"
+    ),
+});
+
 const SignUpPage = () => {
   const [signupComplete, setSignupComplete] = useState(false);
   const identity = useIdentityContext();
@@ -24,6 +42,23 @@ const SignUpPage = () => {
     );
   }
 
+  const onSubmit = async (values, { setSubmitting }) => {
+    const data = {
+      email: values.email,
+      password: values.password,
+      user_metadata: { full_name: values.full_name },
+    };
+
+    try {
+      await identity.signup(data);
+      setSignupComplete(true);
+    } catch (err) {
+      alert(`System error: ${err.message}`);
+    }
+
+    setSubmitting(false);
+  }
+
   return (
     <Fragment>
       <CssBaseline />
@@ -38,39 +73,8 @@ const SignUpPage = () => {
             password: "",
             password2: "",
           }}
-          validationSchema={Yup.object({
-            full_name: Yup.string().required(
-              "Required: Please enter your full name"
-            ),
-            email: Yup.string()
-              .email("Invalid Email address")
-              .required("Required: Please enter your email address"),
-            password: Yup.string().required(
-              "Required: Please enter a password"
-            ),
-            password2: Yup.string()
-              .required("Required: Please retype your password")
-              .oneOf(
-                [Yup.ref("password"), null],
-                "Required: Passwords must match"
-              ),
-          })}
-          onSubmit={async (values, { setSubmitting }) => {
-            const data = {
-              email: values.email,
-              password: values.password,
-              user_metadata: { full_name: values.full_name },
-            };
-
-            try {
-              await identity.signup(data);
-              setSignupComplete(true);
-            } catch (err) {
-              alert(`System error: ${err.message}`);
-            }
-
-            setSubmitting(false);
-          }}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
         >
           {(formik) => (
             <Form>
@@ -80,6 +84,8 @@ const SignUpPage = () => {
                 name="full_name"
                 type="text"
                 margin="dense"
+                onChange={formik.handleChange}
+                value={formik.values.full_name}
                 disabled={formik.isSubmitting}
                 
               />
@@ -91,6 +97,8 @@ const SignUpPage = () => {
                 name="email"
                 type="email"
                 margin="dense"
+                onChange={formik.handleChange}
+                value={formik.values.email}
                 disabled={formik.isSubmitting}
               />
               <ErrorMessage name="email" />
@@ -101,6 +109,8 @@ const SignUpPage = () => {
                 name="password"
                 type="password"
                 margin="dense"
+                onChange={formik.handleChange}
+                value={formik.values.password}
                 disabled={formik.isSubmitting}
               />
               <ErrorMessage name="password" />
@@ -111,6 +121,8 @@ const SignUpPage = () => {
                 name="password2"
                 type="password"
                 margin="dense"
+                onChange={formik.handleChange}
+                value={formik.values.password2}
                 disabled={formik.isSubmitting}
               />
               <ErrorMessage name="password2" />
